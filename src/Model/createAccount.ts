@@ -1,4 +1,4 @@
-export interface createAccountModel{
+export interface AccountModel{
     accountName: string,
     mobileNo: string,
     emailAddress: string,
