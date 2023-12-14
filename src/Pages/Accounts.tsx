@@ -18,7 +18,7 @@ import { GetAccounts } from "../Services/CreateAccountServices";
         try {
           const accountsData = await GetAccounts();
           console.log("new Data", accountsData)
-        //   setData(accountsData); // Corrected variable name here
+          setData(accountsData); // Corrected variable name here
         } catch (error) {
           console.error('Error fetching accounts:', error);
         }
