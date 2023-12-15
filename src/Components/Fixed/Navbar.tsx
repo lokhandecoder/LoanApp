@@ -169,7 +169,8 @@ export default function Navbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+      <AppBar position="fixed"               sx={{ backgroundColor: 'secondary.main' }} // Change text color to secondary
+>
         <Toolbar>
           <IconButton
             size="large"
@@ -196,6 +197,7 @@ export default function Navbar() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />

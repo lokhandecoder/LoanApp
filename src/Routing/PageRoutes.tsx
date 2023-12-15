@@ -11,6 +11,8 @@ function PageRoutes() {
     <Routes>
         <Route path="/"  element={<HomePage />} />
         <Route path="/account"  element={<Account />} />
+
+        <Route path="/account/:id"  element={<Account />} />
         <Route path="/accounts"  element={<Accounts />} />
         <Route path="*" element={<PageNotFoundPage />} />
     </Routes>
