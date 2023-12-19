@@ -27,79 +27,20 @@ import {
   TextField,
 } from "@mui/material";
 import { TransactionModel } from "../../Model/TransactionModel";
+import { TransactionUtilities } from "../../Utilities/TransactionUtilities";
 
 function TransactionForm() {
-  const today = dayjs();
-  const todayDate = today.toDate();
-  const { id } = useParams(); // Get the ID parameter from the URL
-  const accountId = id ? id : ""; // Check if it's a new account or an existing one
-  const [createTransaction, setCreateTransaction] =
-    React.useState<TransactionModel>({
-      accountID: "",
-      principalAmount: 0,
-      paidAmount: 0,
-      balanceAmount: 0,
-      createdDate: todayDate,
-      updatedDate: null,
-      createdUserId: "",
-      updatedUserId: "",
-      startDate: todayDate,
-      closeDate: todayDate,
-      interestRate: 0,
-    });
+  const Transaction = TransactionUtilities();
 
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value, type, checked } = event.target;
+  const {
+    accountId,
+    createTransaction,
+    handleChange,
+    handleDateChange,
+    handleSave,
+    errors,
+  } = Transaction;
 
-  //   setCreateTransaction((prevTransaction) => ({
-  //     ...prevTransaction,
-  //     [name]: type === "checkbox" ? checked : value,
-  //   }));
-  // };
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = event.target;
-
-    setCreateTransaction((prevTransaction) => ({
-      ...prevTransaction,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : type === "number"
-          ? parseFloat(value)
-          : value,
-    }));
-  };
-  const handleDateChange = (date: Date | null, fieldName: string) => {
-    const formattedDate = date ? dayjs(date).toDate() : todayDate;
-
-    setCreateTransaction((prevTransaction) => ({
-      ...prevTransaction,
-      [fieldName]: formattedDate,
-    }));
-  };
-
-  const handleSave = () => {
-    // Add logic to save the transaction data
-    console.log("Saving transaction:", createTransaction);
-  };
-
-  const handleReset = () => {
-    // Reset the form fields to their initial state
-    setCreateTransaction({
-      accountID: "",
-      principalAmount: 0,
-      paidAmount: 0,
-      balanceAmount: 0,
-      createdDate: todayDate,
-      updatedDate: todayDate,
-      createdUserId: "",
-      updatedUserId: "",
-      startDate: todayDate,
-      closeDate: todayDate,
-      interestRate: 0,
-      // ... (your existing initial state)
-    });
-  };
   return (
     <>
       <Card sx={{ minWidth: 275, mt: 3 }}>
@@ -121,6 +62,8 @@ function TransactionForm() {
                 name="accountID"
                 value={createTransaction.accountID}
                 onChange={handleChange}
+                error={!!errors.accountID}
+                helperText={errors.accountID}
               />
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
@@ -133,6 +76,8 @@ function TransactionForm() {
                 name="principalAmount"
                 value={createTransaction.principalAmount}
                 onChange={handleChange}
+                error={!!errors.principalAmount}
+                helperText={errors.principalAmount}
                 // value={Account.accountName}
                 // onChange={handleChange}
                 // error={!!errors.accountName}
@@ -149,6 +94,8 @@ function TransactionForm() {
                 name="paidAmount"
                 value={createTransaction.paidAmount}
                 onChange={handleChange}
+                error={!!errors.paidAmount}
+                helperText={errors.paidAmount}
                 // value={Account.accountName}
                 // onChange={handleChange}
                 // error={!!errors.accountName}
@@ -165,6 +112,8 @@ function TransactionForm() {
                 type="number"
                 value={createTransaction.balanceAmount}
                 onChange={handleChange}
+                error={!!errors.balanceAmount}
+                helperText={errors.balanceAmount}
                 // value={Account.accountName}
                 // onChange={handleChange}
                 // error={!!errors.accountName}
@@ -206,6 +155,8 @@ function TransactionForm() {
                 name="interestRate"
                 type="number"
                 value={createTransaction.interestRate}
+                error={!!errors.interestRate}
+                helperText={errors.interestRate}
                 onChange={handleChange} // Use the existing handleChange function
               />
             </Grid>
