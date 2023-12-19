@@ -26,10 +26,78 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { TransactionModel } from "../../Model/TransactionModel";
 
 function TransactionForm() {
+  const today = dayjs();
+  const todayDate = today.toDate();
   const { id } = useParams(); // Get the ID parameter from the URL
   const accountId = id ? id : ""; // Check if it's a new account or an existing one
+  const [createTransaction, setCreateTransaction] =
+    React.useState<TransactionModel>({
+      accountID: "",
+      mobileNo: "",
+      emailAddress: "",
+      isActive: false,
+      principalAmount: 0,
+      paidAmount: 0,
+      balanceAmount: 0,
+      createdDate: todayDate,
+      updatedDate: todayDate,
+      createdUserId: "",
+      updatedUserId: "",
+      startDate: todayDate,
+      closeDate: todayDate,
+      interestRate: 0,
+    });
+
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value, type, checked } = event.target;
+
+  //   setCreateTransaction((prevTransaction) => ({
+  //     ...prevTransaction,
+  //     [name]: type === "checkbox" ? checked : value,
+  //   }));
+  // };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = event.target;
+  
+    setCreateTransaction((prevTransaction) => ({
+      ...prevTransaction,
+      [name]: type === "checkbox" ? checked : type === 'number' ? parseFloat(value) : value,
+    }));
+  };
+  const handleDatePickerChange = (date: Date | null, name: string) => {
+    setCreateTransaction((prevTransaction) => ({
+      ...prevTransaction,
+      [name]: date || todayDate,
+    }));
+  };
+  const handleSave = () => {
+    // Add logic to save the transaction data
+    console.log("Saving transaction:", createTransaction);
+  };
+
+  const handleReset = () => {
+    // Reset the form fields to their initial state
+    setCreateTransaction({
+      accountID: "",
+      mobileNo: "",
+      emailAddress: "",
+      isActive: false,
+      principalAmount: 0,
+      paidAmount: 0,
+      balanceAmount: 0,
+      createdDate: todayDate,
+      updatedDate: todayDate,
+      createdUserId: "",
+      updatedUserId: "",
+      startDate: todayDate,
+      closeDate: todayDate,
+      interestRate: 0,
+      // ... (your existing initial state)
+    });
+  };
   return (
     <>
       <Card sx={{ minWidth: 275, mt: 3 }}>
@@ -48,11 +116,9 @@ function TransactionForm() {
                 variant="outlined"
                 fullWidth
                 autoComplete="off"
-                name="accountId"
-                // value={Account.accountName}
-                // onChange={handleChange}
-                // error={!!errors.accountName}
-                // helperText={errors.accountName}
+                name="accountID"
+                value={createTransaction.accountID}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
@@ -62,6 +128,8 @@ function TransactionForm() {
                 fullWidth
                 autoComplete="off"
                 name="principalAmount"
+                value={createTransaction.principalAmount}
+                onChange={handleChange}
                 // value={Account.accountName}
                 // onChange={handleChange}
                 // error={!!errors.accountName}
@@ -75,6 +143,8 @@ function TransactionForm() {
                 fullWidth
                 autoComplete="off"
                 name="paidAmount"
+                value={createTransaction.paidAmount}
+                onChange={handleChange}
                 // value={Account.accountName}
                 // onChange={handleChange}
                 // error={!!errors.accountName}
@@ -88,6 +158,8 @@ function TransactionForm() {
                 fullWidth
                 autoComplete="off"
                 name="balanceAmount"
+                value={createTransaction.balanceAmount}
+                onChange={handleChange}
                 // value={Account.accountName}
                 // onChange={handleChange}
                 // error={!!errors.accountName}
@@ -95,53 +167,49 @@ function TransactionForm() {
               />
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Enter Created Date"
-                //   value={/* set the value here */}
-                //   onChange={/* handle change */}
-                //   renderInput={(params) => <TextField {...params} />}
+                  //   value={/* set the value here */}
+                  //   onChange={/* handle change */}
+                  //   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Enter Updated Date"
-                //   value={/* set the value here */}
-                //   onChange={/* handle change */}
-                //   renderInput={(params) => <TextField {...params} />}
+                  //   value={/* set the value here */}
+                  //   onChange={/* handle change */}
+                  //   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Enter Start Date"
-                //   value={/* set the value here */}
-                //   onChange={/* handle change */}
-                //   renderInput={(params) => <TextField {...params} />}
+                  //   value={/* set the value here */}
+                  //   onChange={/* handle change */}
+                  //   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Enter Close Date"
-                //   value={/* set the value here */}
-                //   onChange={/* handle change */}
-                //   renderInput={(params) => <TextField {...params} />}
+                  //   value={/* set the value here */}
+                  //   onChange={/* handle change */}
+                  //   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
             </Grid>
           </Grid>
         </CardContent>
         <CardActions style={{ justifyContent: "right" }}>
-          <Button
-            // onClick={handleFormSubmit}
-            variant="contained"
-            color="primary"
-          >
+          <Button onClick={handleSave} variant="contained" color="primary">
             {accountId === "" ? "Create" : "Update"}
           </Button>
         </CardActions>
