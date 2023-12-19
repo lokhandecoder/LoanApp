@@ -1,8 +1,5 @@
 export interface TransactionModel {
     accountID: string;
-    mobileNo: string;
-    emailAddress: string;
-    isActive: boolean;
     principalAmount: number;
     paidAmount: number;
     balanceAmount: number;

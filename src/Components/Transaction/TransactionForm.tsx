@@ -36,14 +36,11 @@ function TransactionForm() {
   const [createTransaction, setCreateTransaction] =
     React.useState<TransactionModel>({
       accountID: "",
-      mobileNo: "",
-      emailAddress: "",
-      isActive: false,
       principalAmount: 0,
       paidAmount: 0,
       balanceAmount: 0,
       createdDate: todayDate,
-      updatedDate: todayDate,
+      updatedDate: null,
       createdUserId: "",
       updatedUserId: "",
       startDate: todayDate,
@@ -61,18 +58,26 @@ function TransactionForm() {
   // };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
-  
+
     setCreateTransaction((prevTransaction) => ({
       ...prevTransaction,
-      [name]: type === "checkbox" ? checked : type === 'number' ? parseFloat(value) : value,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : type === "number"
+          ? parseFloat(value)
+          : value,
     }));
   };
-  const handleDatePickerChange = (date: Date | null, name: string) => {
+  const handleDateChange = (date: Date | null, fieldName: string) => {
+    const formattedDate = date ? dayjs(date).toDate() : todayDate;
+
     setCreateTransaction((prevTransaction) => ({
       ...prevTransaction,
-      [name]: date || todayDate,
+      [fieldName]: formattedDate,
     }));
   };
+
   const handleSave = () => {
     // Add logic to save the transaction data
     console.log("Saving transaction:", createTransaction);
@@ -82,9 +87,6 @@ function TransactionForm() {
     // Reset the form fields to their initial state
     setCreateTransaction({
       accountID: "",
-      mobileNo: "",
-      emailAddress: "",
-      isActive: false,
       principalAmount: 0,
       paidAmount: 0,
       balanceAmount: 0,
@@ -126,6 +128,7 @@ function TransactionForm() {
                 label="Enter your Principal Amount"
                 variant="outlined"
                 fullWidth
+                type="number"
                 autoComplete="off"
                 name="principalAmount"
                 value={createTransaction.principalAmount}
@@ -142,6 +145,7 @@ function TransactionForm() {
                 variant="outlined"
                 fullWidth
                 autoComplete="off"
+                type="number"
                 name="paidAmount"
                 value={createTransaction.paidAmount}
                 onChange={handleChange}
@@ -158,6 +162,7 @@ function TransactionForm() {
                 fullWidth
                 autoComplete="off"
                 name="balanceAmount"
+                type="number"
                 value={createTransaction.balanceAmount}
                 onChange={handleChange}
                 // value={Account.accountName}
@@ -168,43 +173,41 @@ function TransactionForm() {
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Enter Created Date"
-                  //   value={/* set the value here */}
-                  //   onChange={/* handle change */}
-                  //   renderInput={(params) => <TextField {...params} />}
-                />
+                <FormControl fullWidth>
+                  <DatePicker
+                    label="Enter Start Date"
+                    value={dayjs(createTransaction.startDate)}
+                    onChange={(date: any) =>
+                      handleDateChange(date, "startDate")
+                    }
+                  />
+                </FormControl>
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Enter Updated Date"
-                  //   value={/* set the value here */}
-                  //   onChange={/* handle change */}
-                  //   renderInput={(params) => <TextField {...params} />}
-                />
+                <FormControl fullWidth>
+                  <DatePicker
+                    label="Enter Close Date"
+                    value={dayjs(createTransaction.closeDate)}
+                    onChange={(date: any) =>
+                      handleDateChange(date, "closeDate")
+                    }
+                  />
+                </FormControl>
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Enter Start Date"
-                  //   value={/* set the value here */}
-                  //   onChange={/* handle change */}
-                  //   renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} sm={4} md={3} lg={3}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Enter Close Date"
-                  //   value={/* set the value here */}
-                  //   onChange={/* handle change */}
-                  //   renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
+              <TextField
+                label="Enter your Interest Rate"
+                variant="outlined"
+                fullWidth
+                autoComplete="off"
+                name="interestRate"
+                type="number"
+                value={createTransaction.interestRate}
+                onChange={handleChange} // Use the existing handleChange function
+              />
             </Grid>
           </Grid>
         </CardContent>
