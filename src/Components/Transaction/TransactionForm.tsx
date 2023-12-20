@@ -85,9 +85,6 @@ function TransactionForm() {
                   value={createTransaction.accountId}
                   onChange={handleSelectChange} // Use the new handleChangeSelect function
                 >
-                  <MenuItem value={0} key={0}>
-                    Select Account
-                  </MenuItem>
                   {accountList?.map((account) => (
                     <MenuItem key={account.id} value={account.id}>
                       {account.accountName}
