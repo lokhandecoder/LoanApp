@@ -100,11 +100,11 @@ const AccountForm: React.FC = () => {
                 variant="outlined"
                 fullWidth
                 autoComplete="off"
-                name="adharcard"
-                value={Account.adharcard}
+                name="adharCard"
+                value={Account.adharCard}
                 onChange={handleChange}
-                error={!!errors.adharcard}
-                helperText={errors.adharcard}
+                error={!!errors.adharCard}
+                helperText={errors.adharCard}
               />
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
@@ -113,11 +113,11 @@ const AccountForm: React.FC = () => {
                 variant="outlined"
                 fullWidth
                 autoComplete="off"
-                name="pancard"
-                value={Account.pancard}
+                name="panCard"
+                value={Account.panCard}
                 onChange={handleChange}
-                error={!!errors.pancard}
-                helperText={errors.pancard}
+                error={!!errors.panCard}
+                helperText={errors.panCard}
               />
             </Grid>
             <Grid

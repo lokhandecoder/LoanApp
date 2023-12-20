@@ -16,8 +16,8 @@ export const AccountUtilities = (AccountId: string) => {
     emailAddress: "",
     isActive: false,
     adderss: "",
-    pancard : "",
-    adharcard : "",
+    panCard : "",
+    adharCard : "",
   };
   const [Account, setAccount] = React.useState<AccountModel>(initialState);
   const [errors, setErrors] = React.useState<Partial<AccountModel>>({});
@@ -104,7 +104,7 @@ export const AccountUtilities = (AccountId: string) => {
 
   const fieldError = (): boolean => {
     let hasAnyError = false;
-    const { accountName, mobileNo, emailAddress , adderss, adharcard, pancard } = Account;
+    const { accountName, mobileNo, emailAddress , adderss, adharCard, panCard } = Account;
     const newErrors: Partial<AccountModel> = {};
 
     if (accountName === "") {
@@ -119,17 +119,17 @@ export const AccountUtilities = (AccountId: string) => {
     } else {
       newErrors.adderss = "";
     }
-    if (adharcard === "") {
-      newErrors.adharcard = "Please enter your Adhar card details";
+    if (adharCard === "") {
+      newErrors.adharCard = "Please enter your Adhar card details";
       hasAnyError = true;
     } else {
-      newErrors.adharcard = "";
+      newErrors.adharCard = "";
     }
-    if (pancard === "") {
-      newErrors.pancard = "Please enter your pan card details";
+    if (panCard === "") {
+      newErrors.panCard = "Please enter your pan card details";
       hasAnyError = true;
     } else {
-      newErrors.pancard = "";
+      newErrors.panCard = "";
     }
 
     if (mobileNo === "") {
@@ -171,6 +171,7 @@ export const AccountUtilities = (AccountId: string) => {
         if (AccountId) {
           const response = await fetchAccountById(AccountId);
           setAccount(response.data);
+          console.log("new data", response.data)
         }
       } catch (error) {
         console.error(

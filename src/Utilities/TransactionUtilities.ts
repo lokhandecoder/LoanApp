@@ -1,116 +1,213 @@
 import dayjs from "dayjs";
 import * as React from "react";
 import { useParams } from "react-router";
-import { TransactionModel } from "../Model/TransactionModel";
+import { TransactionModel, TransactionModelById } from "../Model/TransactionModel";
+import { AccountModel } from "../Model/AccountModel";
+import { GetAccounts } from "../Services/AccountServices";
+import { SelectChangeEvent } from "@mui/material/Select";
+import {
+  CreateTransaction,
+  UpdateTransaction,
+  fetchTransactionByID,
+} from "../Services/TransactionServices";
+import useCustomSnackbar from "../Components/Fixed/useCustomSnackbar";
+import { createAsExpression } from "typescript";
+import { useNavigate } from "react-router-dom";
+
+export const TransactionUtilities = (transactionId: string) => {
+  const today = dayjs();
+  const todayDate = today.format("YYYY-MM-DD");
+  const snackbar = useCustomSnackbar();
+  const navigate = useNavigate();
 
 
-export const TransactionUtilities = () => {
-    const today = dayjs();
-    const todayDate = today.toDate();
-    const [errors, setErrors] = React.useState<Partial<TransactionModel>>({});
-    const { id } = useParams(); // Get the ID parameter from the URL
-    const accountId = id ? id : ""; // Check if it's a new account or an existing one
-    const [createTransaction, setCreateTransaction] =
-      React.useState<TransactionModel>({
-        accountID: "",
-        principalAmount: 0,
-        paidAmount: 0,
-        balanceAmount: 0,
-        createdDate: todayDate,
-        updatedDate: null,
-        createdUserId: "",
-        updatedUserId: "",
-        startDate: todayDate,
-        closeDate: todayDate,
-        interestRate: 0,
-      });
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value, type, checked } = event.target;
+  // const parsedTodayDate = dayjs(todayDate).toDate(); // Parse the string to a Date object
+
+  const [errors, setErrors] = React.useState<Partial<TransactionModelById>>({});
+  const [accountList, setAccountList] = React.useState<AccountModel[]>();
+
+  const initialState: TransactionModelById = {
+    id : transactionId || '',
+    accountId: "",
+    principalAmount: "", // Set default numeric value instead of null
+    paidAmount: "", // Set default numeric value instead of null
+    balanceAmount: "", // Set default numeric value instead of null
+    createdDate: todayDate,
+    updatedDate: todayDate,
+    createdUserId: '',
+    updatedUserId: "",
+    startDate: todayDate,
+    closeDate: todayDate,
+    interestRate: "", // Set default numeric value instead of null
+  };
+
+  const [createTransaction, setCreateTransaction] =
+    React.useState<TransactionModelById>(initialState);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = event.target;
+
+    setCreateTransaction((prevTransaction) => ({
+      ...prevTransaction,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : type === "number"
+          ? parseFloat(value)
+          : value,
+    }));
+    console.log("handlechange create transaction", createTransaction)
+  };
+  // const handleChange = (
+  //     fieldName: keyof TransactionModel,
+  //     value: string | number | boolean
+  //   ) => {
+  //     setCreateTransaction({ ...createTransaction, [fieldName]: value });
+  //   };
+  const handleDateChange = (date: Date | null, fieldName: string) => {
+    const formattedDate = date ? dayjs(date).toDate() : todayDate;
+
+    setCreateTransaction((prevTransaction) => ({
+      ...prevTransaction,
+      [fieldName]: formattedDate,
+    }));
+  };
+
+const handleTransactionlIst = () => {
+  navigate('/transactions')
+}
+
   
-      setCreateTransaction((prevTransaction) => ({
-        ...prevTransaction,
-        [name]:
-          type === "checkbox"
-            ? checked
-            : type === "number"
-            ? parseFloat(value)
-            : value,
-      }));
-    };
-    const handleDateChange = (date: Date | null, fieldName: string) => {
-      const formattedDate = date ? dayjs(date).toDate() : todayDate;
+  const handleSave = async () => {
+    const hasError = fieldError();
   
-      setCreateTransaction((prevTransaction) => ({
-        ...prevTransaction,
-        [fieldName]: formattedDate,
-      }));
-    };
+    if (!hasError) {
+      const formattedTransaction = {
+        ...createTransaction,
+        createdUserId: createTransaction.accountId,
+        updatedUserId: createTransaction.accountId,
+        startDate : dayjs(createTransaction.startDate).format("YYYY-MM-DD"),
+        closeDate : dayjs(createTransaction.closeDate).format("YYYY-MM-DD"),
+      };
   
-    const handleSave = () => {
-      // Add logic to save the transaction data
-      const hasError = fieldError();
-      if(!hasError){
-        console.log("form Submitted", createTransaction)
-      }else{
-        console.log("error found")
+      console.log("Form Submitted", formattedTransaction);
+      let sendData ;
+
+      try {
+        if (createTransaction.id !== "") {
+          // Update operation
+          // console.log("formateeed data", formattedTransaction)
+           sendData = await UpdateTransaction(formattedTransaction, transactionId);
+          console.log("Updated Result:", sendData);
+        } else {
+          // Create operation
+           sendData = await CreateTransaction(formattedTransaction);
+          console.log("Created Result:", sendData);
+        }
+       
+      } catch (error: any) {
+        console.log("Error:", error);
+        snackbar.showSnackbar(
+          error,
+          "error",
+          { vertical: "top", horizontal: "center" },
+          5000
+        );
+      }
+      if (sendData.status === 200) {
+        snackbar.showSnackbar(
+          "Transaction Created Successfully",
+          "success",
+          { vertical: "top", horizontal: "center" },
+          5000
+        );
+      } else {
+        snackbar.showSnackbar(
+          sendData.error,
+          "error",
+          { vertical: "top", horizontal: "center" },
+          5000
+        );
+      }
+
+    } else {
+      console.log("Error found");
+    }
+  };
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    const value = event.target.value as string; // Extract the value directly
+
+    setCreateTransaction((prevTransaction) => ({
+      ...prevTransaction,
+      accountId: value,
+    }));
+  };
+  const fieldError = (): boolean => {
+    let hasAnyError = false;
+    const { accountId, principalAmount, paidAmount, interestRate, balanceAmount } = createTransaction;
+    const newErrors: Partial<TransactionModelById & { principalAmount?: string }> = {};
+  
+    if (!createTransaction.accountId.trim()) {
+      newErrors.accountId = "Please enter your Account Number";
+      hasAnyError = true;
+    } else {
+      newErrors.accountId = "";
+    }
+
+    setErrors(newErrors);
+    return hasAnyError;
+  };
+  
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await GetAccounts();
+        if (Array.isArray(response)) {
+          setAccountList(response);
+        } else {
+          console.error("Invalid response format:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
 
-    const fieldError = (): boolean => {
-        let hasAnyError = false;
-        const {
-            accountID,
-            principalAmount,
-            paidAmount,
-            balanceAmount,
-            interestRate
-        } = createTransaction;
-        const newErrors: Partial<TransactionModel> = {};
-    
-        if (!accountID.trim()) {
-            newErrors.accountID = "Please enter your Account Number";
-            hasAnyError = true;
+    fetchData();
+  }, []);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (transactionId) {
+          const response = await fetchTransactionByID(transactionId);
+          if (response.data) {
+            setCreateTransaction((prevTransaction) => ({
+              ...prevTransaction,
+              ...response.data,
+            }));
+          }
+          console.log("res: ", response.data);
         } else {
-            newErrors.accountID = "";
+          setCreateTransaction(initialState);
         }
-        if (principalAmount === 0 && principalAmount !== createTransaction.principalAmount) {
-            newErrors.principalAmount = 0;
-            hasAnyError = true;
-        } else {
-            newErrors.principalAmount = 0;
-        }
-        if (paidAmount === 0 && paidAmount !== createTransaction.paidAmount) {
-            newErrors.paidAmount = 0;
-            hasAnyError = true;
-        } else {
-            newErrors.paidAmount = 0;
-        }
-        if (balanceAmount === 0 && balanceAmount !== createTransaction.balanceAmount) {
-            newErrors.balanceAmount = 0;
-            hasAnyError = true;
-        } else {
-            newErrors.balanceAmount = 0;
-        }
-        if (interestRate === 0 && interestRate !== createTransaction.interestRate) {
-            newErrors.interestRate = 0;
-            hasAnyError = true;
-        } else {
-            newErrors.interestRate = 0;
-        }
-    
-        setErrors(newErrors);
-        return hasAnyError;
+      } catch (error) {
+        console.error(
+          "Error fetching transaction data: " + (error as Error).message
+        );
+      }
     };
-    
-    
 
-    return{
-        accountId,
-        createTransaction,
-        handleChange,
-        handleDateChange,
-        handleSave,
-        errors,
+    fetchData();
+  }, [transactionId]);
 
-    }
-}
+  return {
+    createTransaction,
+    handleChange,
+    handleDateChange,
+    handleSave,
+    errors,
+    snackbar,
+    accountList,
+    handleSelectChange,
+    handleTransactionlIst,
+  };
+};

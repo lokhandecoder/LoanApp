@@ -10,6 +10,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import FormHelperText from "@mui/material/FormHelperText";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 import {
   Box,
@@ -30,22 +32,28 @@ import { TransactionModel } from "../../Model/TransactionModel";
 import { TransactionUtilities } from "../../Utilities/TransactionUtilities";
 
 function TransactionForm() {
-  const Transaction = TransactionUtilities();
+  const { id } = useParams();
+  const transactionId = id || "";
 
   const {
-    accountId,
     createTransaction,
     handleChange,
     handleDateChange,
     handleSave,
     errors,
-  } = Transaction;
+    snackbar,
+    handleSelectChange,
+    accountList,
+    handleTransactionlIst,
+  } = TransactionUtilities(transactionId); // Assuming a custom hook is used here
+
+  const isCreateForm = !transactionId;
 
   return (
     <>
       <Card sx={{ minWidth: 275, mt: 3 }}>
         <Typography variant="h5" gutterBottom>
-          {accountId === "" ? "Create Transaction" : "Update Transaction"}
+          {isCreateForm ? "Create Transaction" : "Update Transaction"}
         </Typography>
         <CardContent>
           <Grid
@@ -54,7 +62,7 @@ function TransactionForm() {
             columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 1 }}
           >
             <Grid item xs={12} sm={4} md={3} lg={3}>
-              <TextField
+              {/* <TextField
                 label="Enter your Account ID"
                 variant="outlined"
                 fullWidth
@@ -64,7 +72,32 @@ function TransactionForm() {
                 onChange={handleChange}
                 error={!!errors.accountID}
                 helperText={errors.accountID}
-              />
+              /> */}
+              <FormControl fullWidth error={!!errors.accountId}>
+                <InputLabel id="demo-simple-select-label">
+                  Account Name
+                </InputLabel>
+                <Select
+                  labelId="accountID"
+                  id="accountID"
+                  name="accountID"
+                  label="Account Name"
+                  value={createTransaction.accountId}
+                  onChange={handleSelectChange} // Use the new handleChangeSelect function
+                >
+                  <MenuItem value={0} key={0}>
+                    Select Account
+                  </MenuItem>
+                  {accountList?.map((account) => (
+                    <MenuItem key={account.id} value={account.id}>
+                      {account.accountName}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {!!errors.accountId && (
+                  <FormHelperText>{errors.accountId}</FormHelperText>
+                )}
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
               <TextField
@@ -77,12 +110,16 @@ function TransactionForm() {
                 value={createTransaction.principalAmount}
                 onChange={handleChange}
                 error={!!errors.principalAmount}
-                helperText={errors.principalAmount}
-                // value={Account.accountName}
-                // onChange={handleChange}
-                // error={!!errors.accountName}
-                // helperText={errors.accountName}
+                // error={createTransaction.principalAmount === ""} // Set error based on the value being empty
+                // helperText={
+                //   createTransaction.principalAmount === ""
+                //     ? "Please enter a value"
+                //     : ""
+                // } // Show helper text if value is empty
               />
+              {!!errors.principalAmount && (
+                  <FormHelperText>{errors.principalAmount}</FormHelperText>
+                )}
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
               <TextField
@@ -94,12 +131,7 @@ function TransactionForm() {
                 name="paidAmount"
                 value={createTransaction.paidAmount}
                 onChange={handleChange}
-                error={!!errors.paidAmount}
-                helperText={errors.paidAmount}
-                // value={Account.accountName}
-                // onChange={handleChange}
-                // error={!!errors.accountName}
-                // helperText={errors.accountName}
+                disabled
               />
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
@@ -112,12 +144,29 @@ function TransactionForm() {
                 type="number"
                 value={createTransaction.balanceAmount}
                 onChange={handleChange}
-                error={!!errors.balanceAmount}
-                helperText={errors.balanceAmount}
+                disabled
                 // value={Account.accountName}
                 // onChange={handleChange}
                 // error={!!errors.accountName}
                 // helperText={errors.accountName}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4} md={3} lg={3}>
+              <TextField
+                label="Enter your Interest Rate"
+                variant="outlined"
+                fullWidth
+                autoComplete="off"
+                name="interestRate"
+                type="number"
+                value={createTransaction.interestRate}
+                onChange={handleChange} // Use the existing handleChange function
+                error={createTransaction.interestRate === ""} // Set error based on the value being empty
+                helperText={
+                  createTransaction.interestRate === ""
+                    ? "Please enter a value"
+                    : ""
+                } // Show helper text if value is empty
               />
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
@@ -146,29 +195,22 @@ function TransactionForm() {
                 </FormControl>
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={4} md={3} lg={3}>
-              <TextField
-                label="Enter your Interest Rate"
-                variant="outlined"
-                fullWidth
-                autoComplete="off"
-                name="interestRate"
-                type="number"
-                value={createTransaction.interestRate}
-                error={!!errors.interestRate}
-                helperText={errors.interestRate}
-                onChange={handleChange} // Use the existing handleChange function
-              />
-            </Grid>
           </Grid>
         </CardContent>
         <CardActions style={{ justifyContent: "right" }}>
           <Button onClick={handleSave} variant="contained" color="primary">
-            {accountId === "" ? "Create" : "Update"}
+            {isCreateForm ? "Create" : "Update"}
+          </Button>
+          <Button
+            onClick={handleTransactionlIst}
+            variant="contained"
+            color="secondary"
+          >
+            Transactions
           </Button>
         </CardActions>
       </Card>
-      {/* <Snackbar
+      <Snackbar
         open={snackbar.open}
         autoHideDuration={snackbar.duration}
         onClose={snackbar.handleSnackbarClose}
@@ -181,7 +223,7 @@ function TransactionForm() {
         >
           {snackbar.message}
         </Alert>
-      </Snackbar> */}
+      </Snackbar>
     </>
   );
 }

@@ -5,14 +5,7 @@ export interface AccountModel{
     emailAddress: string,
     isActive: Boolean,
     adderss: string,
-    pancard : string,
-    adharcard : string,
+    panCard : string,
+    adharCard : string,
 
 }
-// export interface AccountModelwithID{
-//     id : string,
-//     accountName: string,
-//     mobileNo: string,
-//     emailAddress: string,
-//     isActive: Boolean
-// }

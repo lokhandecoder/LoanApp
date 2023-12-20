@@ -39,8 +39,8 @@ function Accounts() {
           emailAddress: item.emailAddress,
           isActive: item.isActive,
           adderss: item.adderss,
-          pancard: item.panCard,
-          adharcard: item.adharCard,
+          panCard: item.panCard,
+          adharCard: item.adharCard,
         }));
 
         console.log("New data from API", formattedData);
@@ -68,24 +68,15 @@ function Accounts() {
       }
     }
   };
-  
 
   const handleEdit = (id: string) => {
     const editUrl = id ? `/account/${id}` : "/account";
     navigate(editUrl);
   };
   async function handleDelete(id: string) {
-    setOpenConfirmation(true)
-    setSelectedAccountId(id)
-    // try {
-    //   // Assuming DeleteAccount expects a number as an argument
-    //   const deleteAccount = await DeleteAccount(id);
-    //   console.log(deleteAccount);
-    //   // alert(id);
-    //   fetchData();
-    // } catch (error) {
-    //   console.error("Error deleting account:", error);
-    // }
+    setOpenConfirmation(true);
+    setSelectedAccountId(id);
+
   }
 
   return (
@@ -131,8 +122,8 @@ function Accounts() {
                     <TableCell>{account.accountName}</TableCell>
                     <TableCell>{account.mobileNo}</TableCell>
                     <TableCell>{account.emailAddress}</TableCell>
-                    <TableCell>{account.adharcard}</TableCell>
-                    <TableCell>{account.pancard}</TableCell>
+                    <TableCell>{account.adharCard}</TableCell>
+                    <TableCell>{account.panCard}</TableCell>
                     <TableCell>{account.adderss}</TableCell>
                     <TableCell>{account.isActive ? "Yes" : "No"}</TableCell>
                     <TableCell>

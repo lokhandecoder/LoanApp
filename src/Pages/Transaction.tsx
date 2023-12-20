@@ -1,15 +1,14 @@
-import React from 'react'
-import LayoutComponent from '../Components/Fixed/LayoutComponent'
-import TransactionForm from '../Components/Transaction/TransactionForm'
+import React from "react";
+import LayoutComponent from "../Components/Fixed/LayoutComponent";
+import TransactionForm from "../Components/Transaction/TransactionForm";
+
 
 function Transaction() {
   return (
-    <>
     <LayoutComponent>
-      <TransactionForm    /> 
+      <TransactionForm />
     </LayoutComponent>
-  </>
-  )
+  );
 }
 
-export default Transaction
+export default Transaction;
