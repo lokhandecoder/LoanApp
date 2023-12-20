@@ -13,8 +13,9 @@ export interface TransactionModel {
   }
 export interface TransactionModelById{
     id: string;
+    accountName : string,
     accountId: string;
-    principalAmount: string | null;
+    principalAmount: number | null;
     paidAmount: number | "";
     balanceAmount: number | "";
     createdDate: string | null

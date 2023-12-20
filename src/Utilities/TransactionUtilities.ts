@@ -23,22 +23,25 @@ export const TransactionUtilities = (transactionId: string) => {
 
   // const parsedTodayDate = dayjs(todayDate).toDate(); // Parse the string to a Date object
 
-  const [errors, setErrors] = React.useState<Partial<TransactionModelById>>({});
+  const [errors, setErrors] = React.useState<{
+    [key: string]: string | null;
+  }>({});
   const [accountList, setAccountList] = React.useState<AccountModel[]>();
 
   const initialState: TransactionModelById = {
     id : transactionId || '',
+    accountName : "",
     accountId: "",
-    principalAmount: "", // Set default numeric value instead of null
-    paidAmount: "", // Set default numeric value instead of null
-    balanceAmount: "", // Set default numeric value instead of null
+    principalAmount: 0, // Set default numeric value instead of null
+    paidAmount: 0, // Set default numeric value instead of null
+    balanceAmount: 0, // Set default numeric value instead of null
     createdDate: todayDate,
     updatedDate: todayDate,
     createdUserId: '',
     updatedUserId: "",
     startDate: todayDate,
     closeDate: todayDate,
-    interestRate: "", // Set default numeric value instead of null
+    interestRate: 0, // Set default numeric value instead of null
   };
 
   const [createTransaction, setCreateTransaction] =
@@ -145,16 +148,33 @@ const handleTransactionlIst = () => {
   const fieldError = (): boolean => {
     let hasAnyError = false;
     const { accountId, principalAmount, paidAmount, interestRate, balanceAmount } = createTransaction;
-    const newErrors: Partial<TransactionModelById & { principalAmount?: string }> = {};
-  
-    if (!createTransaction.accountId.trim()) {
-      newErrors.accountId = "Please enter your Account Number";
+    const newErrors: { [key: string]: string | null } = {}; // Corrected object type syntax
+    
+    if (!accountId.trim()) {
+      newErrors.accountId = "Please select account name"; // Assign error message to newErrors
       hasAnyError = true;
     } else {
-      newErrors.accountId = "";
+      newErrors.accountId = null; // No error, set to null
     }
-
+   
+    if (principalAmount === 0 || principalAmount === null  ) {
+      newErrors.principalAmount = "Please enter a non-zero principal amount"; // Assign error message to newErrors
+      hasAnyError = true;
+    } else {
+      newErrors.principalAmount = null; // No error, set to null
+    }
+    if (interestRate === 0 || interestRate === null  ) {
+      newErrors.interestRate = "Please enter a non-zero interest rate"; // Assign error message to newErrors
+      hasAnyError = true;
+    } else {
+      newErrors.interestRate = null; // No error, set to null
+    }
+    
+  
+    // Assuming setErrors is a function that updates the state with newErrors
     setErrors(newErrors);
+  
+    // Returning the error status
     return hasAnyError;
   };
   

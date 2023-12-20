@@ -33,6 +33,7 @@ function TransactionTable() {
           if (Array.isArray(response)) {
             const formattedData: TransactionModelById[] = response.map((item: any) => ({
               id: item.id,
+              accountName: item.accountName,
               accountId: item.accountId,
               principalAmount: item.principalAmount,
               paidAmount: item.paidAmount,
@@ -112,7 +113,7 @@ function TransactionTable() {
                     backgroundColor: "secondary" /* Your desired text color */,
                   }}
                 >
-                  <TableCell>Account ID</TableCell>
+                  <TableCell>Account Name</TableCell>
                   <TableCell>principalAmount </TableCell>
                   <TableCell>balanceAmount</TableCell>
                   <TableCell>paidAmount</TableCell>
@@ -125,7 +126,7 @@ function TransactionTable() {
               <TableBody>
                 {accounts?.map((account) => (
                   <TableRow key={account.id}>
-                    <TableCell>{account.accountId}</TableCell>
+                    <TableCell>{account.accountName}</TableCell>
                     <TableCell>{account.principalAmount}</TableCell>
                     <TableCell>{account.balanceAmount}</TableCell>
                     <TableCell>{account.paidAmount}</TableCell>

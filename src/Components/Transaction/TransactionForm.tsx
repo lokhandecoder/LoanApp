@@ -110,15 +110,14 @@ function TransactionForm() {
                 value={createTransaction.principalAmount}
                 onChange={handleChange}
                 error={!!errors.principalAmount}
-                // error={createTransaction.principalAmount === ""} // Set error based on the value being empty
                 // helperText={
-                //   createTransaction.principalAmount === ""
+                //   errors.principalAmount === null || errors.principalAmount === "0"
                 //     ? "Please enter a value"
                 //     : ""
-                // } // Show helper text if value is empty
+                // }
               />
-              {!!errors.principalAmount && (
-                  <FormHelperText>{errors.principalAmount}</FormHelperText>
+               {!!errors.principalAmount && (
+                  <FormHelperText  style={{ color: 'red' }}>{errors.principalAmount}</FormHelperText>
                 )}
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
@@ -160,14 +159,12 @@ function TransactionForm() {
                 name="interestRate"
                 type="number"
                 value={createTransaction.interestRate}
+                error={!!errors.interestRate}
                 onChange={handleChange} // Use the existing handleChange function
-                error={createTransaction.interestRate === ""} // Set error based on the value being empty
-                helperText={
-                  createTransaction.interestRate === ""
-                    ? "Please enter a value"
-                    : ""
-                } // Show helper text if value is empty
               />
+               {!!errors.interestRate && (
+                  <FormHelperText  style={{ color: 'red' }}>{errors.interestRate}</FormHelperText>
+                )}
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>

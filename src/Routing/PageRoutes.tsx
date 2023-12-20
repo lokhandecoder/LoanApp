@@ -19,7 +19,7 @@ function PageRoutes() {
 
         <Route path="/account/:id" element={<Account />} />
         <Route path="/accounts" element={<Accounts />} />
-        {/* <Route path="*" element={<PageNotFoundPage />} /> */}
+        <Route path="*" element={<PageNotFoundPage />} />
       </Routes>
     </>
   );
