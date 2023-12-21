@@ -113,24 +113,24 @@ export const AccountUtilities = (AccountId: string) => {
     } else {
       newErrors.accountName = "";
     }
-    if (adderss === "") {
-      newErrors.adderss = "Please enter your complete";
-      hasAnyError = true;
-    } else {
-      newErrors.adderss = "";
-    }
-    if (adharCard === "") {
-      newErrors.adharCard = "Please enter your Adhar card details";
-      hasAnyError = true;
-    } else {
-      newErrors.adharCard = "";
-    }
-    if (panCard === "") {
-      newErrors.panCard = "Please enter your pan card details";
-      hasAnyError = true;
-    } else {
-      newErrors.panCard = "";
-    }
+    // if (adderss === "") {
+    //   newErrors.adderss = "Please enter your complete";
+    //   hasAnyError = true;
+    // } else {
+    //   newErrors.adderss = "";
+    // }
+    // if (adharCard === "") {
+    //   newErrors.adharCard = "Please enter your Adhar card details";
+    //   hasAnyError = true;
+    // } else {
+    //   newErrors.adharCard = "";
+    // }
+    // if (panCard === "") {
+    //   newErrors.panCard = "Please enter your pan card details";
+    //   hasAnyError = true;
+    // } else {
+    //   newErrors.panCard = "";
+    // }
 
     if (mobileNo === "") {
       newErrors.mobileNo = "Please enter your Mobile Number";
@@ -142,15 +142,15 @@ export const AccountUtilities = (AccountId: string) => {
       newErrors.mobileNo = "";
     }
 
-    if (emailAddress === "") {
-      newErrors.emailAddress = "Please enter your Email Address";
-      hasAnyError = true;
-    } else if (!isValidEmail(emailAddress)) {
-      newErrors.emailAddress = "Please enter a valid Email Address";
-      hasAnyError = true;
-    } else {
-      newErrors.emailAddress = "";
-    }
+    // if (emailAddress === "") {
+    //   newErrors.emailAddress = "Please enter your Email Address";
+    //   hasAnyError = true;
+    // } else if (!isValidEmail(emailAddress)) {
+    //   newErrors.emailAddress = "Please enter a valid Email Address";
+    //   hasAnyError = true;
+    // } else {
+    //   newErrors.emailAddress = "";
+    // }
 
     setErrors(newErrors);
     return hasAnyError;
