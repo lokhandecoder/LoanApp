@@ -26,3 +26,10 @@ export interface TransactionModelById{
     closeDate: string | null;
     interestRate: number | "";
 }
+export interface TransactionByAccountID {
+  id: string;
+  interestRate: number;
+  principalAmount: number;
+  interestAmount: number;
+}
+
