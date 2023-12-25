@@ -36,9 +36,9 @@ export const GenerateEMIUtilities = () => {
     }, []);
     // const [person, setPerson] = useState
 
-   const fetchTransactionByAccountId = async () => {
+   const fetchTransactionByAccountId = async (sendObject: any) => {
     try {
-      const response = await fetchTransactionByAccountID(selectedAccountId);
+      const response = await fetchTransactionByAccountID(sendObject);
       console.log("res: ", response.data);
       if (Array.isArray(response.data)) {
         const formattedData: TransactionByAccountID[] = response.data.map((item: any) => ({
@@ -62,9 +62,20 @@ export const GenerateEMIUtilities = () => {
         setIsError(true);
         return;
       }
-  
-      console.log('Selected Account ID:', selectedAccountId);
-      fetchTransactionByAccountId()
+      if (selectedDate === null || selectedDate === undefined) {
+        console.error("Selected date is null or undefined");
+        return;
+      }
+      
+      const date = new Date(selectedDate);
+      const month = date.toLocaleString('default', { month: 'long' });
+      const year = date.getFullYear();
+      const sendObject = {
+        accountId: selectedAccountId,
+        EmiMonth: `${month} ${year}`
+      };
+      console.log('Sending object:', sendObject);
+      fetchTransactionByAccountId(sendObject)
      
       
     };
@@ -74,8 +85,12 @@ export const GenerateEMIUtilities = () => {
       setIsError(false); // Reset error on reset button click
       setGenerateList([])
     };
-
-
+    const handleDateChange = (newDate: Date | null) => {
+      if (newDate !== null) {
+        // Handle the newDate value
+        setSelectedDate(newDate);
+      }
+    };
 
     return {
         selectedAccountId,
@@ -86,5 +101,7 @@ export const GenerateEMIUtilities = () => {
         handleReset,
         generateList,
         fetchTransactionByAccountId,
+        handleDateChange,
+        selectedDate,
     }
 }

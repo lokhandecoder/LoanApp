@@ -23,13 +23,18 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { fetchTransactionByAccountID } from "../../Services/TransactionServices";
 import { GetAccounts } from "../../Services/AccountServices";
 import TransactionsByAccountIdTable from "./TransactionsByAccountIdTable";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 
 function SearchAccounts() {
     const [accountList, setAccountList] = React.useState<AccountModel[]>();
     const [selectedAccountId, setSelectedAccountId] = React.useState<string>("");
     const [isError, setIsError] = React.useState<boolean>(false);
-    const [generateList, setGenerateList] = React.useState<TransactionModelById[]>();
-  
+    const [generateList, setGenerateList] = React.useState<TransactionByAccountID[]>();
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>();
+
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
       const value = event.target.value as string;
       setSelectedAccountId(value); // Store the selected account ID
@@ -60,25 +65,28 @@ function SearchAccounts() {
       }
   
       console.log('Selected Account ID:', selectedAccountId);
-  
+      if (selectedDate === null || selectedDate === undefined) {
+        console.error("Selected date is null or undefined");
+        return;
+      }
+      
+      const date = new Date(selectedDate);
+      const month = date.toLocaleString('default', { month: 'long' });
+      const year = date.getFullYear();
+      const sendObject = {
+        accountId: selectedAccountId,
+        EmiMonth: `${month} ${year}`
+      };
+      console.log('Sending object:', sendObject);
       try {
-        const response = await fetchTransactionByAccountID(selectedAccountId);
+        const response = await fetchTransactionByAccountID(sendObject);
         console.log("res: ", response.data);
         if (Array.isArray(response.data)) {
-          const formattedData: TransactionModelById[] = response.data.map((item: any) => ({
+          const formattedData: TransactionByAccountID[] = response.data.map((item: any) => ({
             id: item.id,
-            accountName: item.accountName,
-            accountId: item.accountId,
             principalAmount: item.principalAmount,
-            paidAmount: item.paidAmount,
-            balanceAmount: item.balanceAmount,
-            createdDate: item.createdDate,
-            updatedDate: item.updatedDate,
-            createdUserId: item.createdUserId,
-            updatedUserId: item.updatedUserId,
-            startDate: item.startDate,
-            closeDate: item.closeDate,
             interestRate: item.interestRate,
+            interestAmount: item.interestAmount,
           }));
       
           console.log("New data from API", formattedData);
@@ -97,6 +105,12 @@ function SearchAccounts() {
       setIsError(false); // Reset error on reset button click
       setGenerateList([])
     };
+    const handleDateChange = (newDate: Date | null) => {
+        if (newDate !== null) {
+          // Handle the newDate value
+          setSelectedDate(newDate);
+        }
+      };
 
 
   return (
@@ -135,6 +149,18 @@ function SearchAccounts() {
                 )}
               </FormControl>
             </Grid>
+            <Grid item xs={12} sm={4} md={3} lg={3}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <DemoContainer components={["DatePicker"]}> */}
+                  <DatePicker
+                    label={'"month" and "year"'}
+                    views={["month", "year"]}
+                    onChange={handleDateChange}
+                    value={selectedDate}
+                  />
+                {/* </DemoContainer> */}
+              </LocalizationProvider>
+            </Grid>
           </Grid>
         </CardContent>
         <CardActions style={{ justifyContent: "right" }}>
@@ -146,22 +172,12 @@ function SearchAccounts() {
           </Button>
         </CardActions>
       </Card>
-      <Grid container spacing={2}>
-      <Grid item xs={4}>
         {generateList && generateList.length > 0 && (
           <Paper>
             <TransactionsByAccountIdTable generateList={generateList} />
           </Paper>
         )}
-      </Grid>
-      <Grid item xs={8}>
-        {/* Your blank section or content on the right */}
-        <Paper>
-          {/* <p>This is the right column.</p> */}
-          {/* Add your content here */}
-        </Paper>
-      </Grid>
-    </Grid>
+
     </>
   )
 }

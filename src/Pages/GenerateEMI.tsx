@@ -17,8 +17,9 @@ function GenerateEMI() {
     handleReset,
     generateList,
     fetchTransactionByAccountId,
+    selectedDate,
+    handleDateChange,
   } = EMI;
-
 
   return (
     <>
@@ -30,9 +31,21 @@ function GenerateEMI() {
           isError={isError}
           handleSearch={handleSearch}
           handleReset={handleReset}
+          handleDateChange={handleDateChange}
+          selectedDate={selectedDate || null}
         />
         {generateList && generateList.length > 0 && (
-          <GenerateEMITable generateList={generateList} fetchTransactionByAccountId={fetchTransactionByAccountId} />
+          <GenerateEMITable
+            generateList={generateList}
+            fetchTransactionByAccountId={() =>
+              fetchTransactionByAccountId({
+                accountId : selectedAccountId,
+                EmiMonth: selectedDate
+              })
+            }
+            selectedDate={selectedDate || null}
+            selectedAccountId={selectedAccountId}
+          />
         )}
       </LayoutComponent>
     </>

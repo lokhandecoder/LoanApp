@@ -2,6 +2,7 @@ import axios from "axios";
 import { TransactionByAccountID, TransactionModel, TransactionModelById } from "../Model/TransactionModel";
 import { API_URL } from "../API_CONFIG";
 import dayjs, { Dayjs } from "dayjs"; // Import dayjs
+import { send } from "process";
 
 export async function CreateTransaction(Data: TransactionModelById): Promise<any> {
   try {
@@ -63,14 +64,17 @@ export async function UpdateTransaction(transaction: TransactionModelById, id : 
       throw error;
     }
   };
-  export async function fetchTransactionByAccountID(id : string): Promise<{ data: TransactionByAccountID}> {
+  export async function fetchTransactionByAccountID(senddata : any): Promise<{ data: TransactionByAccountID}> {
     try {
-      const response = await axios.get(`http://localhost:5164/api/AccountTransaction/GetTransactionsByAccountId/${id}`);
+      console.log("dta top be sned", senddata)
+      const response = await axios.post(`http://localhost:5164/api/AccountTransaction/GetTransactionsByAccountId`,senddata);
       return response;
     } catch (error) {
       throw new Error('Failed to update transaction details: ' + (error as Error).message);
     }
   }
+
+  
   export async function GenerateEMIbyTrnsactionID(id: string): Promise<any> {
     try {
   

@@ -32,6 +32,8 @@ interface GenerateEMISearchProps {
   isError: boolean;
   handleSearch: () => void;
   handleReset: () => void;
+  handleDateChange: (newDate: Date | null) => void; // Updated function signature
+  selectedDate: Date | null;
 }
 
 function GenerateEMISearch(props: GenerateEMISearchProps) {
@@ -42,6 +44,8 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
     isError,
     handleSearch,
     handleReset,
+    handleDateChange,
+    selectedDate,
   } = props;
 
   return (
@@ -86,6 +90,8 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
                   <DatePicker
                     label={'"month" and "year"'}
                     views={["month", "year"]}
+                    onChange={handleDateChange}
+                    value={selectedDate}
                   />
                 {/* </DemoContainer> */}
               </LocalizationProvider>
