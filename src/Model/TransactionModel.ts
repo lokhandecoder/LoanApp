@@ -28,8 +28,11 @@ export interface TransactionModelById{
 }
 export interface TransactionByAccountID {
   id: string;
+  transactionId: string;
   interestRate: number;
   principalAmount: number;
   interestAmount: number;
+  paidInterestAmount: number;
+  emiMonth: string;
 }
 

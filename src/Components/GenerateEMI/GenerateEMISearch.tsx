@@ -100,7 +100,7 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
         </CardContent>
         <CardActions style={{ justifyContent: "right" }}>
           <Button onClick={handleSearch} variant="contained" color="primary">
-            Searchl
+            Search
           </Button>
           <Button onClick={handleReset} variant="contained" color="secondary">
             Reset

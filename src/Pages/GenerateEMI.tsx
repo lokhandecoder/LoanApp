@@ -45,6 +45,8 @@ function GenerateEMI() {
             }
             selectedDate={selectedDate || null}
             selectedAccountId={selectedAccountId}
+              handleSearch={handleSearch} // Pass handleSearch function
+
           />
         )}
       </LayoutComponent>

@@ -43,9 +43,12 @@ export const GenerateEMIUtilities = () => {
       if (Array.isArray(response.data)) {
         const formattedData: TransactionByAccountID[] = response.data.map((item: any) => ({
           id: item.id,
+          transactionId: item.transactionId,
           interestRate: item.interestRate,
           principalAmount: item.principalAmount,
           interestAmount: item.interestAmount,
+          paidInterestAmount: item.paidInterestAmount,
+          emiMonth: item.emiMonth
         }));
     
         console.log("New data from API", formattedData);
@@ -68,11 +71,13 @@ export const GenerateEMIUtilities = () => {
       }
       
       const date = new Date(selectedDate);
-      const month = date.toLocaleString('default', { month: 'long' });
-      const year = date.getFullYear();
+      const formattedDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
+      console.log("Formatted date befor submit:", formattedDate);
+      // const month = date.toLocaleString('default', { month: 'long' });
+      // const year = date.getFullYear();
       const sendObject = {
         accountId: selectedAccountId,
-        EmiMonth: `${month} ${year}`
+        EmiMonth: formattedDate
       };
       console.log('Sending object:', sendObject);
       fetchTransactionByAccountId(sendObject)

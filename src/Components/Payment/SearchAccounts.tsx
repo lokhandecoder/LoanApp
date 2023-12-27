@@ -64,18 +64,19 @@ function SearchAccounts() {
         return;
       }
   
-      console.log('Selected Account ID:', selectedAccountId);
-      if (selectedDate === null || selectedDate === undefined) {
-        console.error("Selected date is null or undefined");
-        return;
+      let formattedDate = ""; // Default formatted date value
+
+      if (selectedDate) {
+        const date = new Date(selectedDate);
+        formattedDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
+        console.log("Formatted date before submit:", formattedDate);
+      } else {
+        // Handle the case when selectedDate is null or undefined
+        // You may choose to set a default date or perform alternative logic here
       }
-      
-      const date = new Date(selectedDate);
-      const month = date.toLocaleString('default', { month: 'long' });
-      const year = date.getFullYear();
       const sendObject = {
         accountId: selectedAccountId,
-        EmiMonth: `${month} ${year}`
+        EmiMonth: formattedDate
       };
       console.log('Sending object:', sendObject);
       try {
@@ -84,9 +85,12 @@ function SearchAccounts() {
         if (Array.isArray(response.data)) {
           const formattedData: TransactionByAccountID[] = response.data.map((item: any) => ({
             id: item.id,
+            transactionId: item.transactionId,
             principalAmount: item.principalAmount,
             interestRate: item.interestRate,
             interestAmount: item.interestAmount,
+            paidInterestAmount: item.paidInterestAmount,
+            emiMonth: item.emiMonth
           }));
       
           console.log("New data from API", formattedData);
@@ -104,6 +108,7 @@ function SearchAccounts() {
       setSelectedAccountId("");
       setIsError(false); // Reset error on reset button click
       setGenerateList([])
+      setSelectedDate(null)
     };
     const handleDateChange = (newDate: Date | null) => {
         if (newDate !== null) {
@@ -174,7 +179,7 @@ function SearchAccounts() {
       </Card>
         {generateList && generateList.length > 0 && (
           <Paper>
-            <TransactionsByAccountIdTable generateList={generateList} />
+            <TransactionsByAccountIdTable generateList={generateList}  />
           </Paper>
         )}
 

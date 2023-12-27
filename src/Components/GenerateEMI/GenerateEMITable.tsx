@@ -21,27 +21,32 @@ interface GenerateEMITableProps {
   fetchTransactionByAccountId: (sendObject: SendObjectType) => Promise<void>; // Update the function to accept an argument
   selectedAccountId: string;
   selectedDate: Date | null;
+  handleSearch: () => void; // Add handleSearch to props
 
 }
 
 function GenerateEMITable(props: GenerateEMITableProps) {
-  const { generateList, fetchTransactionByAccountId, selectedAccountId,selectedDate  } = props;
+  const { generateList, fetchTransactionByAccountId, selectedAccountId,selectedDate , handleSearch } = props;
 
   async function handleGenerate(id: string) {
     console.log(`Generating for ID: ${id}`);
     if (id) {
-      const generate = await GenerateEMIbyTrnsactionID(id);
       if (selectedDate !== null) {
         const date = new Date(selectedDate);
-        const month = date.toLocaleString('default', { month: 'long' });
-        const year = date.getFullYear();
+        const formattedDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
+        console.log("Formatted date befor submit:", formattedDate);
+        // const month = date.toLocaleString('default', { month: 'long' });
+        // const year = date.getFullYear();
         const sendObject = {
-          accountId: selectedAccountId,
-          EmiMonth: `${month} ${year}`
+          TransactionId: id,
+          EmiMonth: formattedDate
         };
-        console.log('Sending object:', sendObject);
-        fetchTransactionByAccountId(sendObject);
         // rest of your code handling date
+        const generate = await GenerateEMIbyTrnsactionID(sendObject);
+
+        console.log("what is this", generate)
+        handleSearch(); // Trigger the Search button click
+
       }
       
     }
@@ -66,7 +71,7 @@ function GenerateEMITable(props: GenerateEMITableProps) {
                 <TableCell>{account.id}</TableCell>
                 <TableCell>{account.principalAmount}</TableCell>
                 <TableCell>{account.interestRate}</TableCell>
-                <TableCell>{account.interestAmount}</TableCell>
+                <TableCell>{account.interestAmount.toFixed(2)}</TableCell>
                 <TableCell>
                   {account.interestAmount === 0 ? (
                     <Button

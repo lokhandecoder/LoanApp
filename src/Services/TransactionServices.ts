@@ -75,11 +75,11 @@ export async function UpdateTransaction(transaction: TransactionModelById, id : 
   }
 
   
-  export async function GenerateEMIbyTrnsactionID(id: string): Promise<any> {
+  export async function GenerateEMIbyTrnsactionID(data: any): Promise<any> {
     try {
   
-      const response = await axios.get(`http://localhost:5164/api/InterestTransaction/GenerateInterestEMI/${id}`,);
-      console.log("send id ", response);
+      const response = await axios.post(`http://localhost:5164/api/InterestTransaction/GenerateInterestEMI`,data);
+      console.log("send id  amit", response);
       return response;
     } catch (error: any) {
       console.log("erro from api", error.message);
