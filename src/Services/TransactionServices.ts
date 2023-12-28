@@ -92,5 +92,29 @@ export async function UpdateTransaction(transaction: TransactionModelById, id : 
       }
     }
   }
-
+  export async function GenerateEMIforAll(data: any): Promise<any> {
+    try {
+  
+      const response = await axios.post(`http://localhost:5164/api/InterestTransaction/GenerateInterestEMIs`,data);
+      console.log("send id  amit", response);
+      return response;
+    } catch (error: any) {
+      console.log("erro from api", error.message);
+      if (error.message) {
+        const Error = error.message;
+        return { error: Error };
+      } else {
+        console.log("An error occurred:", error?.message);
+        return { error: error?.message };
+      }
+    }
+  }
+  export async function GetInterestTransactionsForAllAccounts(): Promise<{ data: any}> {
+    try {
+      const response = await axios.get(`http://localhost:5164/api/dashboard/GetInterestTransactionsForAllAccounts`);
+      return response;
+    } catch (error) {
+      throw new Error('Failed to update transaction details: ' + (error as Error).message);
+    }
+  }
 //http://localhost:5164/api/InterestTransaction/GetInterestEMI/fc66e882-a29f-45f4-658e-08dc0070c04c

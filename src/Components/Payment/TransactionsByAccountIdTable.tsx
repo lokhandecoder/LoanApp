@@ -173,30 +173,37 @@ function TransactionsByAccountIdTable(
                       {formatDate(updatedItem.emiMonth)}
                     </Typography>
                   </Grid>{" "}
-                  <Grid item xs={3}>
+                  <Grid item xs={2}>
                     <TextField
                       label="Principal Amount"
                       value={updatedItem.principalAmount}
                       disabled
                     />
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={2}>
                     <TextField
                       label="Interest Rate"
                       value={updatedItem.interestRate}
                       disabled
                     />
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={2}>
                     <TextField
                       label="Interest Amount"
                       value={updatedItem.interestAmount.toFixed(2)}
                       disabled
                     />
                   </Grid>
-                  {updatedItem.paidInterestAmount === 0 && (
+                  <Grid item xs={2}>
+                    <TextField
+                      label="Balnced Amount"
+                      value={updatedItem.balanceInterestAmount.toFixed(2)}
+                      disabled
+                    />
+                  </Grid>
+                  {updatedItem.balanceInterestAmount !== 0  && (
                     <>
-                      <Grid item xs={3}>
+                      <Grid item xs={2}>
                         <TextField
                           label="Payment Amount"
                           type="number"
@@ -217,12 +224,12 @@ function TransactionsByAccountIdTable(
                           }}
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid item xs={2}>
                         <Button
                           onClick={() => handlePay(updatedItem.id)} // Pass transaction ID
                           variant="contained"
                           color="success"
-                          style={{ justifyContent: "right", marginTop: "20px" }}
+                          style={{ justifyContent: "right", marginTop: "10px" }}
                         >
                           Pay
                         </Button>

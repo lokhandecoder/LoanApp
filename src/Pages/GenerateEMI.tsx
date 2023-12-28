@@ -19,6 +19,8 @@ function GenerateEMI() {
     fetchTransactionByAccountId,
     selectedDate,
     handleDateChange,
+    showGenerateButton,
+    handleGenerateAll,
   } = EMI;
 
   return (
@@ -33,6 +35,8 @@ function GenerateEMI() {
           handleReset={handleReset}
           handleDateChange={handleDateChange}
           selectedDate={selectedDate || null}
+          showGenerateButton={showGenerateButton}
+          handleGenerateAll={handleGenerateAll}
         />
         {generateList && generateList.length > 0 && (
           <GenerateEMITable

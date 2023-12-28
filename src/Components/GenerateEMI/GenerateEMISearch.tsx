@@ -19,7 +19,7 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select";
 import { AccountModel } from "../../Model/AccountModel";
 import { GetAccounts } from "../../Services/AccountServices";
-import { fetchTransactionByAccountID } from "../../Services/TransactionServices";
+import { GenerateEMIbyTrnsactionID, GenerateEMIforAll, fetchTransactionByAccountID } from "../../Services/TransactionServices";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -34,6 +34,9 @@ interface GenerateEMISearchProps {
   handleReset: () => void;
   handleDateChange: (newDate: Date | null) => void; // Updated function signature
   selectedDate: Date | null;
+  showGenerateButton: boolean;
+  handleGenerateAll: () => void;
+
 }
 
 function GenerateEMISearch(props: GenerateEMISearchProps) {
@@ -46,8 +49,34 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
     handleReset,
     handleDateChange,
     selectedDate,
+    showGenerateButton,
+    handleGenerateAll
   } = props;
 
+  // const showGenerateButton = selectedAccountId === "1";
+
+
+  // async function handleGenerateAll (){
+  //   if(showGenerateButton && selectedDate){
+  //     try{
+  //       const date = new Date(selectedDate);
+  //       const formattedDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
+  //       console.log("Formatted date befor submit:", formattedDate);
+
+  //       const sendObject = {
+  //         TransactionId: selectedAccountId,
+  //         EmiMonth: formattedDate
+  //       };
+  //       // rest of your code handling date
+  //       const generate = await GenerateEMIforAll(sendObject);
+
+  //       console.log("what is this", generate)
+  //     }catch(e : any){
+
+  //       console.error(e)
+  //     }
+  //   }
+  // }
   return (
     <>
       <Card sx={{ minWidth: 275, mt: 3 }}>
@@ -73,6 +102,9 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
                   value={selectedAccountId || ""} // Ensure a valid value or fallback to an empty string
                   onChange={handleSelectChange}
                 >
+                    <MenuItem value="1">
+                      All 
+                    </MenuItem>
                   {accountList?.map((account) => (
                     <MenuItem key={account.id} value={account.id}>
                       {account.accountName}
@@ -99,6 +131,11 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
           </Grid>
         </CardContent>
         <CardActions style={{ justifyContent: "right" }}>
+        {showGenerateButton && ( // Conditionally render the button
+            <Button onClick={handleGenerateAll} variant="contained" color="warning">
+              Generate for ALL
+            </Button>
+          )}
           <Button onClick={handleSearch} variant="contained" color="primary">
             Search
           </Button>

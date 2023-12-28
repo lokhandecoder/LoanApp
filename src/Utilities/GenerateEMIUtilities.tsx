@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AccountModel } from "../Model/AccountModel";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { GetAccounts } from "../Services/AccountServices";
-import { fetchTransactionByAccountID } from "../Services/TransactionServices";
+import { GenerateEMIforAll, fetchTransactionByAccountID } from "../Services/TransactionServices";
 import { TransactionByAccountID, TransactionModelById } from "../Model/TransactionModel";
 
 
@@ -12,11 +12,24 @@ export const GenerateEMIUtilities = () => {
     const [isError, setIsError] = React.useState<boolean>(false);
     const [generateList, setGenerateList] = React.useState<TransactionByAccountID[]>();
     const [selectedDate, setSelectedDate] = React.useState<Date | null>();
+    // const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    //   const value = event.target.value as string;
+    //   setSelectedAccountId(value); // Store the selected account ID
+    //   setIsError(false); // Reset error when user selects a value
+    // };
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
       const value = event.target.value as string;
-      setSelectedAccountId(value); // Store the selected account ID
+    
+      if (value === 'All') {
+        // Handle the 'All' selection separately by resetting the value to an empty string
+        setSelectedAccountId('1'); // Set the selected account ID to an empty string
+      } else {
+        setSelectedAccountId(value); // Store the selected account ID
+      }
+    
       setIsError(false); // Reset error when user selects a value
     };
+    
     const fetchData = async () => {
       try {
         const response = await GetAccounts();
@@ -48,7 +61,8 @@ export const GenerateEMIUtilities = () => {
           principalAmount: item.principalAmount,
           interestAmount: item.interestAmount,
           paidInterestAmount: item.paidInterestAmount,
-          emiMonth: item.emiMonth
+          emiMonth: item.emiMonth,
+          balanceInterestAmount: item.balanceInterestAmount
         }));
     
         console.log("New data from API", formattedData);
@@ -97,6 +111,46 @@ export const GenerateEMIUtilities = () => {
       }
     };
 
+    const showGenerateButton = selectedAccountId === "1";
+
+
+    async function handleGenerateAll (){
+      if(showGenerateButton && selectedDate){
+        try{
+          const date = new Date(selectedDate);
+          const formattedDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
+          console.log("Formatted date befor submit:", formattedDate);
+  
+          const sendObject = {
+            TransactionId: selectedAccountId,
+            EmiMonth: formattedDate
+          };
+          // rest of your code handling date
+          const generate = await GenerateEMIforAll(sendObject);
+  
+          console.log("what is this", generate)
+          console.log("res: ", generate.data);
+      if (Array.isArray(generate.data)) {
+        const formattedData: TransactionByAccountID[] = generate.data.map((item: any) => ({
+          id: item.id,
+          transactionId: item.transactionId,
+          interestRate: item.interestRate,
+          principalAmount: item.principalAmount,
+          interestAmount: item.interestAmount,
+          paidInterestAmount: item.paidInterestAmount,
+          emiMonth: item.emiMonth,
+          balanceInterestAmount: item.balanceInterestAmount
+        }));
+    
+        console.log("New data from API", formattedData);
+        setGenerateList(formattedData);
+      }
+        }catch(e : any){
+  
+          console.error(e)
+        }
+      }
+    }
     return {
         selectedAccountId,
         handleSelectChange,
@@ -108,5 +162,7 @@ export const GenerateEMIUtilities = () => {
         fetchTransactionByAccountId,
         handleDateChange,
         selectedDate,
+        showGenerateButton,
+        handleGenerateAll,
     }
 }

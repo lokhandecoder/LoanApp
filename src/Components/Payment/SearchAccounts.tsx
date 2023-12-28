@@ -90,7 +90,8 @@ function SearchAccounts() {
             interestRate: item.interestRate,
             interestAmount: item.interestAmount,
             paidInterestAmount: item.paidInterestAmount,
-            emiMonth: item.emiMonth
+            emiMonth: item.emiMonth,
+            balanceInterestAmount: item.balanceInterestAmount
           }));
       
           console.log("New data from API", formattedData);
