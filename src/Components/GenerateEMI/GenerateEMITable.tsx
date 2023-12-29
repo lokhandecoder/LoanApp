@@ -33,7 +33,7 @@ function GenerateEMITable(props: GenerateEMITableProps) {
     if (id) {
       if (selectedDate !== null) {
         const date = new Date(selectedDate);
-        const formattedDate = `${date.getMonth() + 1}-${date.getFullYear()}`;
+        const formattedDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
         console.log("Formatted date befor submit:", formattedDate);
         // const month = date.toLocaleString('default', { month: 'long' });
         // const year = date.getFullYear();

@@ -21,6 +21,11 @@ import MailIcon from "@mui/icons-material/Mail";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../../appStore";
 import GridViewIcon from '@mui/icons-material/GridView';
+import PeopleIcon from '@mui/icons-material/People';
+import PaidIcon from '@mui/icons-material/Paid';
+import Inventory2Icon from '@mui/icons-material/Inventory2';
+import PaymentIcon from '@mui/icons-material/Payment';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 const drawerWidth = 240;
 
@@ -131,7 +136,7 @@ export default function SideNav() {
                   justifyContent: "center",
                 }}
               >
-                <InboxIcon />
+                <PeopleIcon />
               </ListItemIcon>
               <ListItemText primary="Accounts" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
@@ -151,7 +156,7 @@ export default function SideNav() {
                   justifyContent: "center",
                 }}
               >
-                <InboxIcon />
+                <CurrencyRupeeIcon />
               </ListItemIcon>
               <ListItemText primary="Transactions" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
@@ -171,7 +176,7 @@ export default function SideNav() {
                   justifyContent: "center",
                 }}
               >
-                <InboxIcon />
+                <Inventory2Icon />
               </ListItemIcon>
               <ListItemText primary="Generate EMI" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
@@ -191,7 +196,7 @@ export default function SideNav() {
                   justifyContent: "center",
                 }}
               >
-                <InboxIcon />
+                <PaymentIcon />
               </ListItemIcon>
               <ListItemText primary="Payment" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>

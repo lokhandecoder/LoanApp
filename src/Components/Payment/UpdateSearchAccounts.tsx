@@ -26,9 +26,10 @@ import TransactionsByAccountIdTable from "./TransactionsByAccountIdTable";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import UpdateTrnsactionsByAccountIdTable from "./UpdateTrnsactionsByAccountIdTable";
 
 
-function SearchAccounts() {
+function UpdateSearchAccounts() {
     const [accountList, setAccountList] = React.useState<AccountModel[]>();
     const [selectedAccountId, setSelectedAccountId] = React.useState<string>("");
     const [isError, setIsError] = React.useState<boolean>(false);
@@ -179,7 +180,7 @@ function SearchAccounts() {
       </Card>
         {generateList && generateList.length > 0 && (
           <Paper>
-            <TransactionsByAccountIdTable generateList={generateList}  />
+            <UpdateTrnsactionsByAccountIdTable generateList={generateList} handleSearch={handleSearch} />
           </Paper>
         )}
 
@@ -187,4 +188,4 @@ function SearchAccounts() {
   )
 }
 
-export default SearchAccounts
+export default UpdateSearchAccounts

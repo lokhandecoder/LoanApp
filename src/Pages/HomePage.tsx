@@ -19,7 +19,10 @@ import CurrentMonth from "../Components/HomePage/CurrentMonth/CurrentMonth";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
-import SummaryTable from "../Components/HomePage/SummaryTable";
+import PendingInterestEmiTable from "../Components/HomePage/PendingInterestEmiTable";
+import InterestSummaryTable from "../Components/HomePage/InterestSummaryTable";
+import PrincipalSummaryTable from "../Components/HomePage/PrincipalSummaryTable";
+import PendingPrincipalAmountTable from "../Components/HomePage/PendingPrincipalAmountTable";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -76,78 +79,10 @@ function HomePage() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const [transactions, setTransactions] = React.useState<
-    TransactionModelById[]
-  >([]); // Specify AccountModel as the state type
-  const [interestData, setInterestData] = React.useState<{
-    [key: string]: MonthData;
-  } | null>(null);
-
-  const fetchData = async () => {
-    try {
-      // Fetch data from the API
-      const response = await GetTransactions(); // Replace with your API call
-
-      const count = await GetInterestTransactionsForAllAccounts();
-      // console.log("cpunt", count.data)
-      setInterestData(count.data);
-      // Check if the response is an array before mapping over it
-      console.log("response", response);
-      if (Array.isArray(response)) {
-        const formattedData: TransactionModelById[] = response.map(
-          (item: any) => ({
-            id: item.id,
-            accountName: item.accountName,
-            accountId: item.accountId,
-            principalAmount: item.principalAmount,
-            paidAmount: item.paidAmount,
-            balanceAmount: item.balanceAmount,
-            createdDate: item.createdDate,
-            updatedDate: item.updatedDate,
-            createdUserId: item.createdUserId,
-            updatedUserId: item.updatedUserId,
-            startDate: item.startDate,
-            closeDate: item.closeDate,
-            interestRate: item.interestRate,
-          })
-        );
-
-        console.log("Formatted Data:", formattedData);
-        setTransactions(formattedData);
-      } else {
-        console.error("API response is not an array:", response);
-      }
-    } catch (error) {
-      console.error("Error fetching accounts:", error);
-    }
-  };
-  React.useEffect(() => {
-    fetchData();
-  }, []);
-
-  console.log("Data from api", interestData);
-
   return (
     <>
       x
       <LayoutComponent>
-        {/* <Box sx={{ flexGrow: 1, mt: 4 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <CurrentMonth interestData={interestData} />
-            </Grid>
-            <Grid item xs={12}>
-              <PreviousMonth  interestData={interestData}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Item>xs=4</Item>
-            </Grid>
-            <Grid item xs={12}>
-              <Item>xs=8</Item>
-            </Grid>
-          </Grid>
-        </Box> */}
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -157,25 +92,36 @@ function HomePage() {
             >
               <Tab label="Interest Calculations" {...a11yProps(0)} />
               <Tab label="Principal Calculations" {...a11yProps(1)} />
-              {/* <Tab label="Identity Details" {...a11yProps(2)} />
-          <Tab label="Passport Details" {...a11yProps(3)} />
-          <Tab label="Identity Details" {...a11yProps(4)} /> */}
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <SummaryTable />
+                  <InterestSummaryTable />
                 </Grid>
-                <Grid item xs={12}></Grid>
+                <Grid item xs={12}>
+                  <PendingInterestEmiTable />
+                </Grid>
                 <Grid item xs={12}></Grid>
                 <Grid item xs={12}></Grid>
               </Grid>
             </Box>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            {/* <EmployeeBankDetails /> */}
+          <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <PrincipalSummaryTable />
+                </Grid>
+                <Grid item xs={12}>
+                  <PendingPrincipalAmountTable />
+                  {/* <PendingInterestEmiTable /> */}
+                </Grid>
+                <Grid item xs={12}></Grid>
+                <Grid item xs={12}></Grid>
+              </Grid>
+            </Box>
           </CustomTabPanel>
         </Box>
       </LayoutComponent>

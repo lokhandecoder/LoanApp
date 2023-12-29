@@ -35,5 +35,7 @@ export interface TransactionByAccountID {
   paidInterestAmount: number;
   emiMonth: string;
   balanceInterestAmount: number;
+  balanceAmount: number;
+  paidAmount: number;
 }
 

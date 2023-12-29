@@ -11,7 +11,7 @@ const LayoutComponent: React.FC<{ children: ReactNode }> = ({ children }) => {
       <Box height={30} />
       <Box sx={{ display: "flex" }}>
         <SideNav />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, mt : 3, mr : 4 }}>
           {children}
         </Box>
       </Box>

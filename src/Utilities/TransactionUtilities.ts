@@ -87,6 +87,7 @@ const handleTransactionlIst = () => {
     if (!hasError) {
       const formattedTransaction = {
         ...createTransaction,
+        balanceAmount: createTransaction.principalAmount || 0, // Adjust this line
         createdUserId: createTransaction.accountId,
         updatedUserId: createTransaction.accountId,
         startDate : dayjs(createTransaction.startDate).format("YYYY-MM-DD"),

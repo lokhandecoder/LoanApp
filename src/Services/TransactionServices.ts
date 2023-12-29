@@ -117,4 +117,30 @@ export async function UpdateTransaction(transaction: TransactionModelById, id : 
       throw new Error('Failed to update transaction details: ' + (error as Error).message);
     }
   }
+
+  export async function GetPrincipalTransactionsDetailAsync(): Promise<{ data: any}> {
+    try {
+      const response = await axios.get(`http://localhost:5164/api/dashboard/GetPrincipalTransactionsDetailAsync`);
+      return response;
+    } catch (error) {
+      throw new Error('Failed to update transaction details: ' + (error as Error).message);
+    }
+  }
+
+  export async function GetAccountsAndUnpaidInterestAsync(): Promise<{ data: any}> {
+    try {
+      const response = await axios.get(`http://localhost:5164/api/dashboard/GetAccountsAndUnpaidInterestAsync`);
+      return response;
+    } catch (error) {
+      throw new Error('Failed to update transaction details: ' + (error as Error).message);
+    }
+  }
+  export async function GetUnpaidPrincipalAmountAsync(): Promise<{ data: any}> {
+    try {
+      const response = await axios.get(`http://localhost:5164/api/dashboard/GetUnpaidPrincipalAmountAsync`);
+      return response;
+    } catch (error) {
+      throw new Error('Failed to update transaction details: ' + (error as Error).message);
+    }
+  }
 //http://localhost:5164/api/InterestTransaction/GetInterestEMI/fc66e882-a29f-45f4-658e-08dc0070c04c

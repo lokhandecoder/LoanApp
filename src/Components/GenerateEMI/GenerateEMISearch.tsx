@@ -19,7 +19,11 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select";
 import { AccountModel } from "../../Model/AccountModel";
 import { GetAccounts } from "../../Services/AccountServices";
-import { GenerateEMIbyTrnsactionID, GenerateEMIforAll, fetchTransactionByAccountID } from "../../Services/TransactionServices";
+import {
+  GenerateEMIbyTrnsactionID,
+  GenerateEMIforAll,
+  fetchTransactionByAccountID,
+} from "../../Services/TransactionServices";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -36,7 +40,6 @@ interface GenerateEMISearchProps {
   selectedDate: Date | null;
   showGenerateButton: boolean;
   handleGenerateAll: () => void;
-
 }
 
 function GenerateEMISearch(props: GenerateEMISearchProps) {
@@ -50,11 +53,10 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
     handleDateChange,
     selectedDate,
     showGenerateButton,
-    handleGenerateAll
+    handleGenerateAll,
   } = props;
 
   // const showGenerateButton = selectedAccountId === "1";
-
 
   // async function handleGenerateAll (){
   //   if(showGenerateButton && selectedDate){
@@ -80,9 +82,7 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
   return (
     <>
       <Card sx={{ minWidth: 275, mt: 3 }}>
-        <Typography variant="h5" gutterBottom>
-          Generate EMI
-        </Typography>
+        <Typography variant="subtitle1">Generate EMI</Typography>
         <CardContent>
           <Grid
             container
@@ -102,9 +102,7 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
                   value={selectedAccountId || ""} // Ensure a valid value or fallback to an empty string
                   onChange={handleSelectChange}
                 >
-                    <MenuItem value="1">
-                      All 
-                    </MenuItem>
+                  <MenuItem value="1">All</MenuItem>
                   {accountList?.map((account) => (
                     <MenuItem key={account.id} value={account.id}>
                       {account.accountName}
@@ -119,20 +117,24 @@ function GenerateEMISearch(props: GenerateEMISearchProps) {
             <Grid item xs={12} sm={4} md={3} lg={3}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 {/* <DemoContainer components={["DatePicker"]}> */}
-                  <DatePicker
-                    label={'"month" and "year"'}
-                    views={["month", "year"]}
-                    onChange={handleDateChange}
-                    value={selectedDate}
-                  />
+                <DatePicker
+                  label={'"month" and "year"'}
+                  views={["month", "year"]}
+                  onChange={handleDateChange}
+                  value={selectedDate}
+                />
                 {/* </DemoContainer> */}
               </LocalizationProvider>
             </Grid>
           </Grid>
         </CardContent>
         <CardActions style={{ justifyContent: "right" }}>
-        {showGenerateButton && ( // Conditionally render the button
-            <Button onClick={handleGenerateAll} variant="contained" color="warning">
+          {showGenerateButton && ( // Conditionally render the button
+            <Button
+              onClick={handleGenerateAll}
+              variant="contained"
+              color="warning"
+            >
               Generate for ALL
             </Button>
           )}

@@ -17,3 +17,11 @@ export async function PayInterestAmount(data : any): Promise<{}> {
       throw new Error('Failed to update transaction details: ' + (error as Error).message);
     }
   }
+  export async function PayPrincipalAmount(data : any): Promise<{}> {
+    try {
+      const response = await axios.post(`http://localhost:5164/api/AccountTransaction/PayPrincipalAmount`,data);
+      return response;
+    } catch (error) {
+      throw new Error('Failed to update transaction details: ' + (error as Error).message);
+    }
+  }
