@@ -64,7 +64,8 @@ export const GenerateEMIUtilities = () => {
           emiMonth: item.emiMonth,
           balanceInterestAmount: item.balanceInterestAmount,
           balanceAmount: item.balanceAmount,
-          paidAmount: item.paidAmount
+          paidAmount: item.paidAmount,
+          interestEMIId: item.interestEMIId,
         }));
     
         console.log("New data from API", formattedData);

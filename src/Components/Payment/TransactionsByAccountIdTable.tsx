@@ -82,7 +82,7 @@ function TransactionsByAccountIdTable(
       handleView(selectedRow);
       if (response.status === 200) {
         snackbar.showSnackbar(
-          "Payment Successfully",
+          `Payment Successfully of ${paymentAmount} Rs`,
           "success",
           { vertical: "top", horizontal: "center" },
           5000
@@ -90,12 +90,12 @@ function TransactionsByAccountIdTable(
         // Perform additional actions for successful payment
       } else {
         console.log("Unexpected response:", response);
-        // snackbar.showSnackbar(
-        //   error,
-        //   "error",
-        //   { vertical: "top", horizontal: "center" },
-        //   5000
-        // );
+        snackbar.showSnackbar(
+          "Faild Payment",
+          "error",
+          { vertical: "top", horizontal: "center" },
+          5000
+        );
         // Handle other status codes or unexpected responses
       }
     } catch (error) {

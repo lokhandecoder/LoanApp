@@ -27,14 +27,16 @@ interface TransactionsByAccountIdTableProps {
   generateList: TransactionByAccountID[];
   handleSearch: () => void;
 }
-interface PaymentState {
-  TransactionId: string | null;
-  PaidInterestAmount: number | null;
-}
 interface PaymentResponse {
-  status?: number; // Making the 'status' property optional
-  // Other properties if present in the response
-  // ...
+  data: {
+    id: string;
+    accountId: string;
+    principalAmount: number;
+    // Other properties...
+  };
+  status: number;
+  statusText: string;
+  // Other properties...
 }
 
 function UpdateTrnsactionsByAccountIdTable(
@@ -83,7 +85,24 @@ function UpdateTrnsactionsByAccountIdTable(
     };
 
     try {
-      const FetchInterest = await PayPrincipalAmount(SendData);
+      const payPrincipal = await PayPrincipalAmount(SendData) as PaymentResponse;
+      console.log("pay: ", payPrincipal.status);
+      if(payPrincipal.status === 200){
+        snackbar.showSnackbar(
+          `Payment Successfully of ${paymentAmount} Rs`,
+          "success",
+          { vertical: "top", horizontal: "center" },
+          5000
+        );
+
+      }else{
+        snackbar.showSnackbar(
+          "Error",
+          "error",
+          { vertical: "top", horizontal: "center" },
+          5000
+        );
+      }
       // Resetting payment amount to 0 after successful payment
       setPaymentAmounts((prevAmounts) => ({
         ...prevAmounts,

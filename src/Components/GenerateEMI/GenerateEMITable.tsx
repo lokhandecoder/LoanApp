@@ -11,7 +11,7 @@ import {
   TransactionByAccountID,
   TransactionModelById,
 } from "../../Model/TransactionModel";
-import { GenerateEMIbyTrnsactionID } from "../../Services/TransactionServices";
+import { DeleteEMIbyInterestID, GenerateEMIbyTrnsactionID } from "../../Services/TransactionServices";
 interface SendObjectType {
   accountId: string;
   EmiMonth: string;
@@ -22,11 +22,16 @@ interface GenerateEMITableProps {
   selectedAccountId: string;
   selectedDate: Date | null;
   handleSearch: () => void; // Add handleSearch to props
-
 }
 
 function GenerateEMITable(props: GenerateEMITableProps) {
-  const { generateList, fetchTransactionByAccountId, selectedAccountId,selectedDate , handleSearch } = props;
+  const {
+    generateList,
+    fetchTransactionByAccountId,
+    selectedAccountId,
+    selectedDate,
+    handleSearch,
+  } = props;
 
   async function handleGenerate(id: string) {
     console.log(`Generating for ID: ${id}`);
@@ -39,18 +44,25 @@ function GenerateEMITable(props: GenerateEMITableProps) {
         // const year = date.getFullYear();
         const sendObject = {
           TransactionId: id,
-          EmiMonth: formattedDate
+          EmiMonth: formattedDate,
         };
         // rest of your code handling date
         const generate = await GenerateEMIbyTrnsactionID(sendObject);
 
-        console.log("what is this", generate)
+        console.log("what is this", generate);
         handleSearch(); // Trigger the Search button click
-
       }
-      
     }
   }
+  async function handleDelete(id: string) {
+    if (id) {
+      const deletedItem = await DeleteEMIbyInterestID(id);
+      console.log("deleted successfully", deletedItem);
+      handleSearch(); // Trigger the Search button click
+      // Use deletedItem or any other appropriate name instead of 'delete'
+    }
+  }
+  
 
   return (
     <>
@@ -62,6 +74,7 @@ function GenerateEMITable(props: GenerateEMITableProps) {
               <TableCell>Principal Amount</TableCell>
               <TableCell>Interest Rate</TableCell>
               <TableCell>Interest Amount</TableCell>
+              <TableCell>Paid Interest Amount</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
@@ -72,14 +85,26 @@ function GenerateEMITable(props: GenerateEMITableProps) {
                 <TableCell>{account.principalAmount}</TableCell>
                 <TableCell>{account.interestRate}</TableCell>
                 <TableCell>{account.interestAmount.toFixed(2)}</TableCell>
+                <TableCell>{account.paidInterestAmount.toFixed(2)}</TableCell>
+
                 <TableCell>
                   {account.interestAmount === 0 ? (
                     <Button
                       onClick={() => handleGenerate(account.id)}
                       variant="contained"
-                      color="primary"
+                      color="warning"
+                      style={{ marginRight: "8px" }}
                     >
                       Generate
+                    </Button>
+                  ) : account.paidInterestAmount === 0 ? (
+                    <Button
+                      onClick={() => handleDelete(account.interestEMIId)}
+                      variant="contained"
+                      color="error"
+                      style={{ marginRight: "8px" }}
+                    >
+                      Delete
                     </Button>
                   ) : null}
                 </TableCell>

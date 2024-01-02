@@ -16,6 +16,7 @@ interface TransactionData {
     transactionId: string,
     principalAmount: number;
     balanceAmount: number;
+    monthYear: string;
 }
 
 function PendingPrincipalAmountTable() {
@@ -30,12 +31,18 @@ function PendingPrincipalAmountTable() {
             const fetchedData = response.data;
             const transformedData: TransactionData[] = [];
   
-            // Function to get the actual month name from MM/YYYY format
             const getMonthNameFromDateString = (dateString: string) => {
               const [month, year] = dateString.split('/');
-              const dateObj = new Date(Number(year), Number(month) - 1, 1);
-              return dateObj.toLocaleString('default', { month: 'long' });
+              const dateObj = new Date(`${year}-${month}-01`);
+            
+              const options: Intl.DateTimeFormatOptions = {
+                year: 'numeric',
+                month: 'long',
+              };
+            
+              return dateObj.toLocaleDateString(undefined, options);
             };
+            
   
             const addTransactionIfNonZeroInterest = (
               transactions: any[],
@@ -46,11 +53,13 @@ function PendingPrincipalAmountTable() {
                 if (transaction.interestAmount !== 0) {
                   transformedData.push({
                     ...transaction,
-                    emiMonth: getMonthNameFromDateString(monthYear),
+                    monthYear: monthLabel, // Display month and year
                   });
                 }
               });
             };
+            
+            
   
             addTransactionIfNonZeroInterest(
               fetchedData.currentMonth,
@@ -68,7 +77,11 @@ function PendingPrincipalAmountTable() {
               fetchedData.monthBeforePreviousMonthYear
             );
   
-            setTransactions(transformedData);
+            const filteredTransactions = transformedData.filter(
+              (transaction) => transaction.principalAmount !== 0
+            );
+  
+            setTransactions(filteredTransactions);
             setMonthLabels([
               getMonthNameFromDateString(fetchedData.currentMonthYear),
               getMonthNameFromDateString(fetchedData.previousMonthYear),
@@ -97,7 +110,7 @@ function PendingPrincipalAmountTable() {
         <TableBody>
           {transactions.map((transaction, index) => (
             <TableRow key={index}>
-              <TableCell>{transaction.accountId}</TableCell>
+              <TableCell>{transaction.monthYear}</TableCell>
               <TableCell>{transaction.accountName}</TableCell>
               <TableCell>{transaction.principalAmount}</TableCell>
               <TableCell>{transaction.balanceAmount}</TableCell>

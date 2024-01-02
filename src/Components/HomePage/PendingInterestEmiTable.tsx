@@ -92,7 +92,7 @@ function PendingInterestEmiTable() {
               <TableCell>EMI Month</TableCell>
               <TableCell>Account Name</TableCell>
               <TableCell>Interest Amount</TableCell>
-              <TableCell>Interest ID</TableCell>
+              {/* <TableCell>Interest ID</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -101,7 +101,7 @@ function PendingInterestEmiTable() {
                 <TableCell>{transaction.emiMonth}</TableCell>
                 <TableCell>{transaction.accountName}</TableCell>
                 <TableCell>{transaction.interestAmount}</TableCell>
-                <TableCell>{transaction.interestId}</TableCell>
+                {/* <TableCell>{transaction.interestId}</TableCell> */}
               </TableRow>
             ))}
           </TableBody>

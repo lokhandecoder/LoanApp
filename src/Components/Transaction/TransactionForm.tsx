@@ -138,7 +138,7 @@ function TransactionForm() {
                 autoComplete="off"
                 name="balanceAmount"
                 type="number"
-                value={createTransaction.balanceAmount}
+                value={createTransaction.principalAmount}
                 onChange={handleChange}
                 disabled
                 // value={Account.accountName}

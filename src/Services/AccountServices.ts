@@ -1,11 +1,11 @@
 import axios from "axios";
 import { AccountModel } from "../Model/AccountModel";
-import { API_URL } from "../API_CONFIG";
+import { API__ACCOUNT_URL } from "../API_CONFIG";
 
 export async function createAccountService(Data: AccountModel): Promise<any> {
   try {
     const response = await axios.post(
-      `${API_URL}account`,
+      `${API__ACCOUNT_URL}account`,
       Data
     );
     console.log("send data from api",response);
@@ -25,7 +25,7 @@ export async function createAccountService(Data: AccountModel): Promise<any> {
 export async function updateAccountService(account: AccountModel): Promise<any> {
   try {
     const response = await axios.put(
-      `${API_URL}account/${account.id}`,
+      `${API__ACCOUNT_URL}account/${account.id}`,
       account
     );
     console.log("send data from api",response);
@@ -44,7 +44,7 @@ export async function updateAccountService(account: AccountModel): Promise<any> 
 }
 export async function GetAccounts(): Promise<{ data: AccountModel[]}> {
   try {
-    const response = await axios.get(`${API_URL}account`);
+    const response = await axios.get(`${API__ACCOUNT_URL}account`);
     return response.data;
   } catch (error) {
     throw new Error('Failed to update leave data: ' + (error as Error).message);
@@ -52,7 +52,7 @@ export async function GetAccounts(): Promise<{ data: AccountModel[]}> {
 }
 export async function fetchAccountById(id : string): Promise<{ data: AccountModel}> {
   try {
-    const response = await axios.get(`${API_URL}account/${id}`);
+    const response = await axios.get(`${API__ACCOUNT_URL}account/${id}`);
     return response;
   } catch (error) {
     throw new Error('Failed to update leave data: ' + (error as Error).message);
@@ -61,7 +61,7 @@ export async function fetchAccountById(id : string): Promise<{ data: AccountMode
 
 export const DeleteAccount = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}account/${id}`);
+    const response = await axios.delete(`${API__ACCOUNT_URL}account/${id}`);
     return response.data;
   } catch (error) {
     throw error;
