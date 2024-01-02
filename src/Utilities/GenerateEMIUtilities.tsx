@@ -66,6 +66,7 @@ export const GenerateEMIUtilities = () => {
           balanceAmount: item.balanceAmount,
           paidAmount: item.paidAmount,
           interestEMIId: item.interestEMIId,
+          accountName: item.accountName,
         }));
     
         console.log("New data from API", formattedData);

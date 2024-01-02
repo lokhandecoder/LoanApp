@@ -38,5 +38,6 @@ export interface TransactionByAccountID {
   balanceAmount: number;
   paidAmount: number;
   interestEMIId: string;
+  accountName: string;
 }
 

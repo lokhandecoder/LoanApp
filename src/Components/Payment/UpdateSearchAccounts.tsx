@@ -96,6 +96,7 @@ function UpdateSearchAccounts() {
             balanceAmount: item.balanceAmount,
             paidAmount: item.paidAmount,
             interestEMIId: item.interestEMIId,
+            accountName: item.accountName,
 
           }));
       

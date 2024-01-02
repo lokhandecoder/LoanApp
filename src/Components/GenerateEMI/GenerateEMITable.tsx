@@ -70,7 +70,7 @@ function GenerateEMITable(props: GenerateEMITableProps) {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow sx={{ backgroundColor: "secondary" }}>
-              <TableCell>Transaction ID</TableCell>
+              <TableCell>Account Name</TableCell>
               <TableCell>Principal Amount</TableCell>
               <TableCell>Interest Rate</TableCell>
               <TableCell>Interest Amount</TableCell>
@@ -81,7 +81,7 @@ function GenerateEMITable(props: GenerateEMITableProps) {
           <TableBody>
             {generateList?.map((account, index) => (
               <TableRow key={index}>
-                <TableCell>{account.id}</TableCell>
+                <TableCell>{account.accountName}</TableCell>
                 <TableCell>{account.principalAmount}</TableCell>
                 <TableCell>{account.interestRate}</TableCell>
                 <TableCell>{account.interestAmount.toFixed(2)}</TableCell>
